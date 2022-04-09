@@ -1,6 +1,6 @@
 // fake data
 import mongoose from "mongoose";
-const Product = mongoose.model("Product", {name: String})
+const Product = mongoose.model("Product", {name: String ,price : Number,image: String})
 import slugify from "slugify";
 
 export const list = async (req, res) => { // get all
@@ -17,6 +17,7 @@ export const list = async (req, res) => { // get all
 export const get = async (req , res) => { // get a product
     try {
         const products = await Product.findOne({_id: req.params.id }).exec();
+        console.log(req);
         res.json(products);    
     } catch (error) {
         res.status(400).json({
@@ -24,8 +25,8 @@ export const get = async (req , res) => { // get a product
         })
     }
 }
-export const create =async (req, res) => { // them
-    req.body.slug = slugify(req.body.name);
+export const create = async (req, res) => { // them
+    console.log(req.body)
     try {
         const product = await new Product(req.body).save()
         res.json(product);    

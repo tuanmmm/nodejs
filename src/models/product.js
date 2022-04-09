@@ -1,11 +1,11 @@
 import mongoose, { Schema }  from "mongoose";
 const ObjectId = Schema.Types;
 
-const productSchema = mongoose.Schema({
+const productSchema = new Schema({
     name: {
         type: String,
         required: true,
-    },
+    }, 
     slug: {
         type: String,
         lowercase: true,
@@ -19,9 +19,13 @@ const productSchema = mongoose.Schema({
     category: {
         type: ObjectId,
         ref: "Category"
+    },
+    image:{
+       type: String, 
+       required: true,  
     }
-}, { timestamps: true} )
+}, { timestamps: true} );
 
-export default mongoose.model('Product', productSchema);
+export default mongoose.model('Products', productSchema);
 
 
