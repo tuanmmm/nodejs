@@ -1,5 +1,5 @@
 import User from '../models/user';
-
+import jwt from 'jsonwebtoken'
 export const signup = async (req, res) => {
     const { name, email, password} = req.body;
     try {
@@ -24,5 +24,26 @@ export const signup = async (req, res) => {
 }
 
 export const signin = async (req, res) => {
-
+    const { email, password} = req.body;
+    const user = await User.findOne({email}).exec();
+    if(!user){
+        return res.status(400).json({
+            message: "User khong ton tai"
+        })
+    }
+    if(!user.authenticate(password)){
+        return res.status(400).json({
+            message: "Mat khau khong dung"
+        })
+    }
+    const token = jwt.sign({_id: user._id}, "123456", { expiresIn: 60 * 60 });
+    return res.json({
+        token,
+        user: {
+            _id: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role
+        }
+    })
 } 
